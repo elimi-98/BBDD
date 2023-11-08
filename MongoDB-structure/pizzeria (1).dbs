@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="pizzeria" id="Project-1666" database="MongoDb" >
+	<schema name="pizzeria" >
+		<table name="Botiga" prior="Collection" >
+			<column name="_id" type="objectId" jt="-8" mandatory="y" />
+			<column name="direccio" type="array[object]" jt="4999545" >
+				<column name="carrer" type="string" jt="12" />
+				<column name="num" type="int" jt="4" />
+				<column name="codi_postal" type="int" jt="4" />
+				<column name="localitat" type="string" jt="12" />
+				<column name="provincia" type="string" jt="12" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="Client" prior="Collection" >
+			<column name="_id" type="objectId" jt="-8" mandatory="y" />
+			<column name="nom" type="string" jt="12" />
+			<column name="cognom1" type="string" jt="12" />
+			<column name="cognom2" type="string" jt="12" />
+			<column name="telf" type="int" jt="4" />
+			<column name="direccio" type="array[object]" jt="4999545" >
+				<column name="carrer" type="string" jt="12" />
+				<column name="num" type="int" jt="4" />
+				<column name="codi_postal" type="int" jt="4" />
+				<column name="localitat" type="string" jt="12" />
+				<column name="provincia" type="string" jt="12" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="fk_client_comanda" virtual="y" to_schema="pizzeria" to_table="Comanda" />
+		</table>
+		<table name="Comanda" prior="Collection" >
+			<column name="_id" type="objectId" jt="-8" mandatory="y" />
+			<column name="id_botiga" prior="id_comanda" type="objectId" jt="-8" mandatory="y" />
+			<column name="id_producte" type="int" jt="4" />
+			<column name="id_client" type="int" jt="4" />
+			<column name="id_treballador" type="int" jt="4" />
+			<column name="data_hora" type="date" jt="91" />
+			<column name="entrega" type="enum" jt="12" >
+				<enumeration><![CDATA['botiga', 'domicili']]></enumeration>
+			</column>
+			<column name="preu_total" type="double" jt="8" />
+			<column name="productes" type="array[object]" jt="4999545" >
+				<column name="producte" type="array[object]" jt="4999545" >
+					<column name="id" type="int" jt="4" />
+					<column name="quantitat" type="int" jt="4" />
+				</column>
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="fk_comanda_botiga" virtual="y" to_schema="pizzeria" to_table="Botiga" >
+				<fk_column name="id_botiga" pk="_id" />
+			</fk>
+			<fk name="fk_comanda_treballador" virtual="y" to_schema="pizzeria" to_table="treballador" >
+				<fk_column name="id_treballador" pk="id_" />
+			</fk>
+			<fk name="fk_comanda_client" virtual="y" to_schema="pizzeria" to_table="Client" >
+				<fk_column name="id_client" pk="_id" />
+			</fk>
+		</table>
+		<table name="Producte" prior="Collection" >
+			<column name="_id" type="objectId" jt="-8" mandatory="y" />
+			<column name="nom" type="string" jt="12" />
+			<column name="descripcio" type="string" jt="12" />
+			<column name="imatge" type="symbol" jt="16" />
+			<column name="preu" type="double" jt="8" />
+			<column name="tipus" type="enum" jt="12" >
+				<enumeration><![CDATA['pizza', 'hamburguesa', 'beguda']]></enumeration>
+			</column>
+			<column name="categoria" type="string" jt="12" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="fk_producte_comanda" virtual="y" to_schema="pizzeria" to_table="Comanda" >
+				<fk_column name="_id" pk="id_producte" />
+			</fk>
+		</table>
+		<table name="treballador" prior="repartidor/cuiner" >
+			<column name="id_" prior="_id" type="objectId" jt="-8" mandatory="y" />
+			<column name="id_botiga" prior="_id" type="objectId" jt="-8" mandatory="y" />
+			<column name="nom" type="string" jt="12" />
+			<column name="cognom1" type="string" jt="12" />
+			<column name="cognom2" type="string" jt="12" />
+			<column name="telf" type="int" jt="4" />
+			<column name="NIF" prior="NIE" type="string" jt="12" />
+			<index name="id_" unique="PRIMARY_KEY" >
+				<column name="id_" />
+			</index>
+			<fk name="fk_treballador_botiga" virtual="y" to_schema="pizzeria" to_table="Botiga" >
+				<fk_column name="id_botiga" pk="_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1e40" show_relation="name" >
+		<entity schema="pizzeria" name="Botiga" color="C1D8EE" x="896" y="80" />
+		<entity schema="pizzeria" name="Client" color="C1D8EE" x="48" y="208" />
+		<entity schema="pizzeria" name="Comanda" color="C1D8EE" x="368" y="160" />
+		<entity schema="pizzeria" name="Producte" color="C1D8EE" x="672" y="128" />
+		<entity schema="pizzeria" name="Botiga" column="direccio" color="3986C1" x="832" y="192" />
+		<entity schema="pizzeria" name="Client" column="direccio" color="3986C1" x="160" y="384" />
+		<entity schema="pizzeria" name="Comanda" column="productes.producte" color="3986C1" x="512" y="368" />
+		<entity schema="pizzeria" name="Comanda" column="productes" color="3986C1" x="368" y="384" />
+		<entity schema="pizzeria" name="treballador" color="C1D8EE" x="816" y="336" />
+		<group name="CLIENT" color="C4E0F9" >
+			<entity schema="pizzeria" name="Client" />
+			<entity schema="pizzeria" name="Client" column="direccio" />
+		</group>
+		<group name="BOTIGA" color="C4E0F9" >
+			<entity schema="pizzeria" name="Botiga" column="direccio" />
+			<entity schema="pizzeria" name="Botiga" />
+			<entity schema="pizzeria" name="treballador" />
+			<entity schema="pizzeria" name="Producte" />
+		</group>
+		<group name="COMANDES" color="C4E0F9" >
+			<entity schema="pizzeria" name="Comanda" />
+			<entity schema="pizzeria" name="Comanda" column="productes" />
+			<entity schema="pizzeria" name="Comanda" column="productes.producte" />
+		</group>
+		<script name="pizzeria.sql" id="Editor-13e1" language="SQL" file="file:/C:/Users/Virginia/Desktop/PIZZERIA/pizzeria.sql" />
+	</layout>
+</project>
