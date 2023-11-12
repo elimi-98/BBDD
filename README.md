@@ -1,2 +1,2 @@
 # BBDD
-MySQL and MongoDB queries and 
+**MySQL** and **MongoDB** queries and structures.
